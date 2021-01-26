@@ -19,8 +19,11 @@ DAY=$1
 dir="day${DAY}"
 prog="day${DAY}.py"
 
-mkdir -p $dir                                     || error "Unable to create $dir"
-test -f "$dir/$prog" || cp dayN.py "$dir/$prog"   || error "Unable to install $prog"
+mkdir -p $dir || error "Unable to create $dir"
+
+test -f "$dir/$prog" || \
+    sed 's!day N *$!day '$DAY'!i' dayN.py > "$dir/$prog" || \
+    error "Unable to install $prog"
 
 echo "Created $dir"
 
