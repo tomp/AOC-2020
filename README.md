@@ -1,2 +1,2 @@
 # AOC-2020
-Python solutions to the Advent of Code 2020 puzzles
+Python solutions for the 2020 Advent of Code http://adventofcode.com/2020
