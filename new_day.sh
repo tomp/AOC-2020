@@ -25,5 +25,7 @@ test -f "$dir/$prog" || \
     sed 's!day N *$!day '$DAY'!i' dayN.py > "$dir/$prog" || \
     error "Unable to install $prog"
 
+chmod +x "$dir/$prog"
+
 echo "Created $dir"
 
