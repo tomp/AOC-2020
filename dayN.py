@@ -2,6 +2,7 @@
 #
 #  Advent of Code 2020 - Day N
 #
+from pathlib import Path
 
 INPUTFILE = 'input.txt'
 
@@ -12,7 +13,7 @@ def sample_input():
 
 def load_input(infile):
     lines = []
-    with open(infile, 'r') as fp:
+    for line in Path(infile).open():
         for line in fp:
             line = line.strip()
             if line:
