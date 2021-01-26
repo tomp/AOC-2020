@@ -12,21 +12,13 @@ def sample_input():
 # Utility functions
 
 def load_input(infile):
-    lines = []
-    for line in Path(infile).open():
-        for line in fp:
-            line = line.strip()
-            if line:
-                lines.append(line)
-        return lines
+    return list(filter_blank_lines(Path(infile).open()))
 
-def split_nonblank_lines(text):
-    lines = []
-    for line in text.splitlines():
+def filter_blank_lines(lines):
+    for line in lines:
         line = line.strip()
         if line:
-            lines.append(line)
-    return lines
+            yield line
 
 # Solution
 
@@ -36,14 +28,23 @@ def solve(arg):
 
 # PART 1
 
-def example():
+def arg_example():
     cases = [('arg1', 'expected1'),
              ('arg2', 'expected2')]
     for arg, expected in cases:
         result = solve(arg)
-        print("'{}' -> {} (expected {})".format(arg, result, expected))
+        print(f"'{arg}' -> {result} (expected {expected})")
         assert result == expected
     print('= ' * 32)
+
+def lines_example():
+    lines = sample_input()
+    result = solve(lines)
+    print(f"'sample-input' -> {result} (expected {expected})")
+    assert result == expected
+    print('= ' * 32)
+
+example = lines_example
 
 def part1(lines):
     result = solve(lines)
@@ -54,14 +55,14 @@ def part1(lines):
 # PART 2
 
 def example2():
-    print('= ' * 32)
+    pass
 
 def part2(lines):
-    print('= ' * 32)
+    pass
 
 if __name__ == '__main__':
     example()
-    # input = load_input(INPUTFILE)
-    # part1(input)
+    # lines = load_input(INPUTFILE)
+    # part1(lines)
     # example2()
-    # part2(input)
+    # part2(lines)
