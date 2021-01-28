@@ -17,15 +17,19 @@ test -n "$1" || usage
 DAY=$1
 
 dir="day${DAY}"
-prog="day${DAY}.py"
+prog="$dir/day${DAY}.py"
+infile="$dir/input.txt"
 
 mkdir -p $dir || error "Unable to create $dir"
-
-test -f "$dir/$prog" || \
-    sed 's!day N *$!day '$DAY'!i' dayN.py > "$dir/$prog" || \
-    error "Unable to install $prog"
-
-chmod +x "$dir/$prog"
-
 echo "Created $dir"
 
+test -f "$prog" || \
+    sed 's!day N *$!day '$DAY'!i' dayN.py > "$prog" || \
+    error "Unable to install $prog"
+
+chmod +x "$prog"
+echo "Wrote $prog"
+
+./get_input.py $DAY > "$infile" || \
+    error "Unable to download input data"
+echo "Downloaded $(wc -l $infile | awk '{print $1}') lines to $infile"
