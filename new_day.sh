@@ -33,3 +33,6 @@ echo "Wrote $prog"
 ./get_input.py $DAY > "$infile" || \
     error "Unable to download input data"
 echo "Downloaded $(wc -l $infile | awk '{print $1}') lines to $infile"
+
+git add "$prog" "$infile"
+
