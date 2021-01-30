@@ -8,27 +8,23 @@ INPUTFILE = "input.txt"
 
 
 def sample_input():
-    return ""
+    return filter_blank_lines(SAMPLE_INPUT.split("\n"))
 
 
 # Utility functions
 
-
 def load_input(infile):
-    return list(filter_blank_lines(Path(infile).open()))
+    return filter_blank_lines(Path(infile).open())
 
 
 def filter_blank_lines(lines):
-    for line in lines:
-        line = line.strip()
-        if line:
-            yield line
+    return [line.strip() for line in lines if line.strip()]
 
 
 # Solution
 
 
-def solve(arg):
+def solve(lines):
     """Solve the problem."""
     pass
 
@@ -48,12 +44,13 @@ def arg_example():
 def lines_example():
     lines = sample_input()
     result = solve(lines)
+    expected = 0
     print(f"'sample-input' -> {result} (expected {expected})")
     assert result == expected
     print("= " * 32)
 
 
-example = lines_example
+example1 = lines_example
 
 
 def part1(lines):
@@ -74,8 +71,8 @@ def part2(lines):
 
 
 if __name__ == "__main__":
-    example()
-    # lines = load_input(INPUTFILE)
-    # part1(lines)
+    example1()
+    lines = load_input(INPUTFILE)
+    part1(lines)
     # example2()
     # part2(lines)
