@@ -6,6 +6,8 @@ from pathlib import Path
 
 INPUTFILE = "input.txt"
 
+SAMPLE_INPUT = """
+"""
 
 def sample_input():
     return filter_blank_lines(SAMPLE_INPUT.split("\n"))
@@ -16,13 +18,11 @@ def sample_input():
 def load_input(infile):
     return filter_blank_lines(Path(infile).open())
 
-
 def filter_blank_lines(lines):
     return [line.strip() for line in lines if line.strip()]
 
 
 # Solution
-
 
 def solve(lines):
     """Solve the problem."""
@@ -31,8 +31,10 @@ def solve(lines):
 
 # PART 1
 
+#!! DELETE THE example1 FUNCTION YOU'RE NOT GOING TO USE
 
-def arg_example():
+def example1():
+    """Run example for problem with input arguments."""
     cases = [("arg1", "expected1"), ("arg2", "expected2")]
     for arg, expected in cases:
         result = solve(arg)
@@ -41,16 +43,14 @@ def arg_example():
     print("= " * 32)
 
 
-def lines_example():
+def example1():
+    """Run example for problem with input lines."""
     lines = sample_input()
     result = solve(lines)
     expected = 0
     print(f"'sample-input' -> {result} (expected {expected})")
     assert result == expected
     print("= " * 32)
-
-
-example1 = lines_example
 
 
 def part1(lines):
@@ -61,10 +61,8 @@ def part1(lines):
 
 # PART 2
 
-
 def example2():
     pass
-
 
 def part2(lines):
     pass
