@@ -9,6 +9,11 @@ INPUTFILE = "input.txt"
 SAMPLE_INPUT = """
 """
 
+SAMPLE_CASES = [
+    (arg1, expected1),
+    (arg2, expected2),
+]
+
 def sample_input():
     return filter_blank_lines(SAMPLE_INPUT.split("\n"))
 
@@ -35,8 +40,7 @@ def solve(lines):
 
 def example1():
     """Run example for problem with input arguments."""
-    cases = [("arg1", "expected1"), ("arg2", "expected2")]
-    for arg, expected in cases:
+    for arg, expected in SAMPLE_CASES:
         result = solve(arg)
         print(f"'{arg}' -> {result} (expected {expected})")
         assert result == expected
@@ -45,7 +49,7 @@ def example1():
 
 def example1():
     """Run example for problem with input lines."""
-    lines = sample_input()
+    lines = filter_blank_lines(SAMPLE_INPUT.split("\n"))
     result = solve(lines)
     expected = 0
     print(f"'sample-input' -> {result} (expected {expected})")
@@ -72,5 +76,5 @@ if __name__ == "__main__":
     example1()
     lines = load_input(INPUTFILE)
     part1(lines)
-    # example2()
-    # part2(lines)
+    example2()
+    part2(lines)
