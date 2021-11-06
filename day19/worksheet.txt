@@ -1,0 +1,244 @@
+
+SAMPLE_INPUT = """
+0: 4 1 5
+1: 2 3 | 3 2
+2: 4 4 | 5 5
+3: 4 5 | 5 4
+4: "a"
+5: "b"
+
+ababbb
+bababa
+abbbab
+aaabbb
+aaaabbb
+"""
+
+SAMPLE_INPUT2 = """
+ 0: 8 11
+ 1: "a"
+ 2: 1 24 | 14 4
+ 3: 5 14 | 16 1
+ 4: 1 1
+ 5: 1 14 | 15 1
+ 6: 14 14 | 1 14
+ 7: 14 5 | 1 21
+ 8: 42 | 42 8
+ 9: 14 27 | 1 26
+10: 23 14 | 28 1
+11: 42 31 | 42 11 31
+12: 24 14 | 19 1
+13: 14 3 | 1 12
+14: "b"
+15: 1 | 14
+16: 15 1 | 14 14
+17: 14 2 | 1 7
+18: 15 15
+19: 14 1 | 14 14
+20: 14 14 | 1 15
+21: 14 1 | 1 14
+22: 14 14
+23: 25 1 | 22 14
+24: 14 1
+25: 1 1 | 1 14
+26: 14 22 | 1 20
+27: 1 6 | 14 18
+28: 16 1
+31: 14 17 | 1 13
+42: 9 14 | 10 1
+
+fail  1513  abbbbbabbbaaaababbaabbbbabababbbabbbbbbabaaaa
+MATCH 2142  bbabbbbaabaabba
+fail  1142  babbbbaabbbbbabbbbbbaabaaabaaa
+      3641  aaabbbbbbaaaabaababaabababbabaaabbababababaaa
+      7443  bbbbbbbaaaabbbbaaabbabaaa
+      3111  bbbababbbbaaaaaaaabbababaaababaabab
+      11116 ababaaaaaabaaab
+      11115 ababaaaaabbbaba
+      1224  baabbaaaabbaaaababbaababb
+      1414  abbbbabbbbaaaababbbbbbaaaababb
+----- 5221  aaaaabbaabaaaaababaa
+      4242  aaaabbaaaabbaaa
+MATCH 4222  aaaabbaabbaaaaaaabbbabbbaaabbaabaaa
+      1113  babaaabbbaaabaababbaabababaaab
+      2523  aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba
+"""
+
+5221  aaaaabbaabaaaaababaa
+
+          |    |    |    |
+5221  aaaaabbaabaaaaababaa
+
+
+COMPILED RULES
+
+ 0: 8 11
+ 2: "aba" | "baa"
+ 3: 5 "b"  | 16 "a"
+ 5: "ab"   | 15 "a"
+ 6: "bb"   | "ab"
+ 7: "b" 5  | "a" 21
+ 8: 42     | 42 8
+ 9: "b" 27 | "a" 26
+10: 23 "b" | 28 "a"
+11: 42 31  | 42 11 31
+12: "bab"  | 19 "a"
+13: "b" 3  | "a" 12
+15: "a"    | "b"
+16: 15 "a" | "bb"
+17: "b" 2  | "a" 7
+18: 15 15
+19: "ba"   | "bb"
+20: "bb"   | "a" 15
+21: "ba"   | "ab"
+23: 25 "a" | "bbb"
+25: "aa"   | "ab"
+26: "bbb"  | "a" 20
+27: "a" 6  | "b" 18
+28: 16 "a"
+31: "b" 17 | "a" 13
+42: 9 "b"  | 10 "a"
+
+
+COMPILED RULES v2
+
+ 0: 8 11
+ 2: "aba" | "baa"
+ 3: 5 "b"  | 16 "a"
+ 5: "ab"   | ".a"
+ 7: "b" 5  | "a" 21
+ 8: 42     | 42 8
+ 9: "b" 27 | "a" 26
+10: 23 "b" | 28 "a"
+11: 42 31  | 42 11 31
+12: "bab"  | "b.a"
+13: "b" 3  | "a" 12
+16: "aa" | "b."
+17: "b" 2  | "a" 7
+20: "bb" | "a."
+21: "ba" | "ab"
+23: "a.a" | "bbb"
+26: "bbb"  | "a" 20
+27: "a.b" | "b.."
+28: "aaa" | "b.a"
+31: "b" 17 | "a" 13
+42: 9 "b"  | 10 "a"
+
+
+COMPILED RULES v3
+
+ 0: 8 11
+ 8: 42     | 42 8
+11: 42 31  | 42 11 31
+
+ 9: "ba.b" | "bb.." | "abbb"  | "aabb" | "aaa."
+10: "a.ab" | "bbbb" | "aaaa" | "b.aa"
+
+42: 9 "b"  | 10 "a"
+
+13: "babb" | "b.ab" | "baaa" | "bb.a"  | "abab" | "ab.a"
+17: "baba" | "bbaa" | "abab" | "ab.a" | "aaba" | " aaab"
+
+31: "b" 17 | "a" 13
+
+
+COMPILED RULES v4
+
+ 0: 42+ 42{n} 31{n}
+
+ 9: "ba.b" | "bb.." | "abbb"  | "aabb" | "aaa."
+10: "a.ab" | "bbbb" | "aaaa" | "b.aa"
+
+42: 9 "b"  | 10 "a"
+
+13: "babb" | "b.ab" | "baaa" | "bb.a"  | "abab" | "ab.a"
+17: "baba" | "bbaa" | "abab" | "ab.a" | "aaba" | " aaab"
+
+31: "b" 17 | "a" 13
+
+
+COMPILED RULES v5
+
+ 0: 42+ 42{n} 31{n}
+
+42: "ba.bb" | "bb..b" | "abbbb" | "aabbb" | "aaa.b"
+    "a.aba" | "bbbba" | "aaaaa" | "b.aaa"
+
+31: "ababb" | "ab.ab" | "abaaa" | "abb.a" | "aabab" | "aab.a"
+    "bbaba" | "bbbaa" | "babab" | "bab.a" | "baaba" | "baaab"
+
+
+COMPILED RULES v6
+
+ 0: 42+ 42{n} 31{n}
+
+42:
+    "aaaaa"
+    "aaa.b"
+    "aaaba"
+    "aabbb"
+    "ababa"
+    "abbbb"
+    "b.aaa"
+    "ba.bb"
+    "bb..b"
+    "bbbba"
+
+31:
+    "aab.a"
+    "aabab"
+    "abaaa"
+    "ab.ab"
+    "ababb"
+    "abb.a"
+    "baaab"
+    "baaba"
+    "bab.a"
+    "babab"
+    "bbaba"
+    "bbbaa"
+
+
+COMPILED RULES v7
+
+ 0: 42+ 42{n} 31{n}
+
+42:
+    "aaaaa"
+    "aaaab"
+    "aaaba"
+    "aaabb"
+    "aabbb"
+    "ababa"
+    "abbbb"
+    "baaaa"
+    "baabb"
+    "babbb"
+    "bbaaa"
+    "bbaab"
+    "bbabb"
+    "bbbab"
+    "bbbba"
+    "bbbbb"
+
+31:
+    "aabaa"
+    "aabab"
+    "aabba"
+    "abaaa"
+    "abaab"
+    "ababb"
+    "abbaa"
+    "abbab"
+    "abbba"
+    "baaab"
+    "baaba"
+    "babaa"
+    "babab"
+    "babba"
+    "bbaba"
+    "bbbaa"
+
+aaaaa bbaab aaaaa babaa
+
+

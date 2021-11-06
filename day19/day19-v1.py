@@ -7,10 +7,6 @@ from pprint import pprint
 
 INPUTFILE = "input.txt"
 
-CHARACTERS = "ab"
-
-MAX_REPEATS = 10
-
 SAMPLE_INPUT = """
 0: 4 1 5
 1: 2 3 | 3 2
@@ -90,14 +86,15 @@ def filter_blank_lines(lines):
 
 def parse_rule(line):
     num, rest = line.split(": ")
-    rest = rest.strip()
+    if rest[0] == '"':
+        val = rest.strip('"')
+        return num, val, None, None
      
-    alts = []
-    for item in rest.split("|"):
-        alts.append([v.strip('"') for v in item.strip().split()])
+    if "|" not in rest:
+        return num, None, rest.strip().split(), None
 
-    # print(f"parse_rule: {num} -> {alts}")
-    return num, alts
+    alt1, alt2 = rest.strip().split(" | ")
+    return num, None, alt1.split(), alt2.split()
 
 def parse_input(lines):
     """Parse input doc and return a dict representing the rules, and a list
@@ -113,14 +110,10 @@ def parse_input(lines):
         if not line.strip():
             messages = []
             continue
-        idx, alts = parse_rule(line)
-        rule[idx] = alts
+        idx, val, seq1, seq2 = parse_rule(line)
+        rule[idx] = (val, seq1, seq2)
 
     return rule, messages
-
-def expand_rules(rule):
-    """Propagate static rules, to simplify the search tree."""
-    pass
 
 def match_rule(rule, message, num, idx, step=0):
     """Returns an integer, reporting the new message position, if we
@@ -128,61 +121,44 @@ def match_rule(rule, message, num, idx, step=0):
     """
     step += 1
     if idx >= len(message):
-        # print(f"[{step:02d}] --> 0")
+        print(f"[{step:02d}] --> 0")
         return 0
-
-    # print(f"[{step:02d}] match_rule: {num} @{idx}  '{message[idx:]}'")
-
-    alts = rule[num]
-    for alt in rule[num]:
-        if len(alt) == 1 and alt[0][0] in CHARACTERS:
-            # print(f"[{step:02d}] rule {num} alt '{alt}'")
-            val = alt[0]
-            size = len(val)
-            if idx+size > len(message):
-                # print(f"[{step:02d}] '{val}' --> 0")
-                continue
-            if message[idx:idx+size] == val:
-                # print(f"[{step:02d}] {val} --> {idx+size}")
-                return idx + size
-            continue
-
-        num1 = alt[0]
-        if num1.endswith('+'):
-            repeats = 1
-            num1 = num1[:-1]
-        else:
-            repeats = 0
-
-        while True:
-            if repeats:
-                seq = [num1] * repeats + alt[1:]
-            else:
-                seq = alt
-            # print(f"[{step:02d}] *** rule {num} alt '{' '.join(seq)}'")
-
-            seq_idx = idx
-            for numi in seq:
-                seq_idx = match_rule(rule, message, numi, seq_idx, step)
-                if seq_idx == 0:
-                    break
-            if seq_idx:
-                # print(f"[{step:02d}] --> {seq_idx}")
-                return seq_idx
-
-            if not repeats or repeats >= MAX_REPEATS:
-                break
-            repeats += 1
-
-    # print(f"[{step:02d}] --> 0")
+    print(f"[{step:02d}] match_rule: {num} @{idx}  '{message[idx:]}'")
+    val, seq1, seq2 = rule[num]
+    if val:
+        if message[idx] == val:
+            print(f"[{step:02d}] {val} --> {idx+1}")
+            return idx + 1
+        print(f"[{step:02d}] {val} --> 0")
+        return 0
+    if seq1:
+        new_idx = match_seq(rule, message, seq1, idx, step)
+        if new_idx:
+            print(f"[{step:02d}] --> {new_idx}")
+            return new_idx
+    if seq2:
+        new_idx = match_seq(rule, message, seq2, idx, step)
+        if new_idx:
+            print(f"[{step:02d}] --> {new_idx}")
+            return new_idx
+    print(f"[{step:02d}] --> 0")
     return 0
+
+def match_seq(rule, message, seq, idx, step):
+    """Returns an integer, reporting how many characters were matched."""
+    print(f"[{step:02d}] match_seq: {seq} @{idx}")
+    for num in seq:
+        idx = match_rule(rule, message, num, idx, step)
+        if idx == 0:
+            return 0
+    return idx
 
 def validate(rule, message):
     """Validate the given message against the rules.
     Return True if it's valid, else False.
     """
-    # print("- " * 32)
-    # print(f"validate: '{message}'")
+    print("- " * 32)
+    print(f"validate: '{message}'")
     result = match_rule(rule, message, "0", 0)
     if result == len(message):
         print(f"MATCH  '{message}'")
@@ -196,8 +172,8 @@ def solve(lines):
     rule, messages = parse_input(lines)
     print("RULES:")
     pprint(rule)
-    # print("MESSAGES:")
-    # print("\n".join(messages))
+    print("MESSAGES:")
+    print("\n".join(messages))
     result = 0
     for message in messages:
         if validate(rule, message):
@@ -208,9 +184,8 @@ def solve(lines):
 def solve2(lines):
     """Solve the problem."""
     rule, messages = parse_input(lines)
-    rule['8'] = [['42'], ['42', '8']]
-    rule['11'] = [['42', '31'], ['42', '11', '31']]
-    rule['0'] = [['42+', '11']]
+    rule['8'] = (None, ['42'], ['42', '8'])
+    rule['11'] = (None, ['42', '31'], ['42', '11', '31'])
     print("RULES:")
     pprint(rule)
     print("MESSAGES:")
