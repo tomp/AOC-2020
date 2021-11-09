@@ -14,17 +14,41 @@ SAMPLE_CASES = [
     (arg2, expected2),
 ]
 
-def sample_input():
-    return filter_blank_lines(SAMPLE_INPUT.split("\n"))
-
 
 # Utility functions
+
+## Use these if blank lines should be discarded.
+def sample_input():
+    return filter_blank_lines(SAMPLE_INPUT.split("\n"))
 
 def load_input(infile):
     return filter_blank_lines(Path(infile).open())
 
 def filter_blank_lines(lines):
     return [line.strip() for line in lines if line.strip()]
+
+
+## Use these if blank lines in input are meaningful.
+def sample_input():
+    return SAMPLE_INPUT.strip("\n").split("\n")
+
+def load_input(infile):
+    return [line.strip() for line in Path(infile).open()]
+
+def parse_sections(lines):
+    result = []
+    sect = []
+    for line in lines:
+        line = line.strip()
+        if not line:
+            if sect:
+                result.append(sect)
+            sect = []
+        else:
+            sect.append(line)
+    if sect:
+        result.append(sect)
+    return result
 
 
 # Solution
