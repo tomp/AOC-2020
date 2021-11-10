@@ -64,6 +64,7 @@ def solve(lines):
 
 def example1():
     """Run example for problem with input arguments."""
+    print("EXAMPLE 1:")
     for arg, expected in SAMPLE_CASES:
         result = solve(arg)
         print(f"'{arg}' -> {result} (expected {expected})")
@@ -73,6 +74,7 @@ def example1():
 
 def example1():
     """Run example for problem with input lines."""
+    print("EXAMPLE 1:")
     lines = filter_blank_lines(SAMPLE_INPUT.split("\n"))
     result = solve(lines)
     expected = 0
@@ -82,6 +84,7 @@ def example1():
 
 
 def part1(lines):
+    print("PART 1:")
     result = solve(lines)
     print(f"result is {result}")
     print("= " * 32)
@@ -89,11 +92,6 @@ def part1(lines):
 
 # PART 2
 
-def example2():
-    pass
-
-def part2(lines):
-    pass
 
 
 if __name__ == "__main__":
