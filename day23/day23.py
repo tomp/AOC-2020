@@ -93,42 +93,7 @@ class LinkedList:
         after.left = p
 
 
-def make_move(cups, curr):
-    ncups = len(cups)
-    icurr = cups.index(curr)
-    
-    istart, iend = (icurr + 1) % ncups , (icurr + 3) % ncups
-    # print(f"ncup: {ncups}  curr: {curr}  icurr: {icurr}  cups: {to_str(cups)}")
-    # print(f"istart: {istart}  iend: {iend}")
-    if istart == 0:
-        removed = cups[:iend+1]
-        cups = cups[iend+1:]
-    elif iend < istart:
-        removed = cups[istart:] + cups[:iend+1]
-        cups = cups[iend+1:istart]
-    else:
-        removed = cups[istart:iend+1]
-        cups = cups[:istart] + cups[iend+1:]
-
-    # print(f"cups: {to_str(cups)}  removed: {to_str(removed)}")
-
-    dest = curr - 1
-    while dest and dest not in cups:
-        dest -= 1
-    if not dest:
-        dest = max(cups)
-    idest = cups.index(dest) + 1
-
-    # print(f"dest: {dest}  idest: {idest}")
-    # print(f"{to_str(cups[:idest])} {to_str(removed)} {to_str(cups[idest:])}")
-    cups = cups[:idest] + removed + cups[idest:]
-    icurr = (cups.index(curr) + 1) % ncups
-    curr = cups[icurr]
-
-    # print(f"cups: {to_str(cups)}  icurr: {icurr}  curr: {curr}")
-    return cups, curr
-
-def play_game(cups, moves):
+def play_game(cups: LinkedList, moves: int) -> LinkedList:
     curr = cups
     ncup = cups.size()
 
@@ -159,14 +124,14 @@ def play_game(cups, moves):
         curr = curr.right
     return node[1]
 
-def solve(labels, moves):
+def solve(labels: str, moves: int) -> str:
     """Solve the problem."""
     cups = LinkedList.from_labels(labels)
     final = play_game(cups, moves)
     result = str(final).replace(" ", "")[1:]
     return result
 
-def solve2(labels, moves=10000000):
+def solve2(labels: str, moves: int = 10000000) -> int:
     """Solve the problem."""
     cups = LinkedList.from_labels(labels, size=1000000)
     assert cups.size() == 1000000
